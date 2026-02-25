@@ -180,6 +180,7 @@ const WeeklySummary = () => {
                         <th>Prix</th>
                         <th>Profit</th>
                         <th>Coût</th>
+                        <th>Téléphone</th> 
                         <th>Commentaire</th>
                         <th>Preuve</th>
                         <th>Heure</th>

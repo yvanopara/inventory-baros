@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./ReserveSales.css";
-import { backendUrl } from "../../App";
+import { backendUrl } from "../../App"; // ← Import depuis App.js
 
 export default function ReserveSales() {
   const [products, setProducts] = useState([]);
@@ -118,9 +118,8 @@ export default function ReserveSales() {
       });
 
       if (res.status === 200) {
-        toast.success("⬆️ Réservation annulée avec succès !"); // Flèche verte
-        // Retirer immédiatement la réservation annulée de la liste
-        setReservedSales(prev => prev.filter(sale => sale._id !== reservationId));
+        toast.success("⬆️ Réservation annulée avec succès !");
+        setReservedSales((prev) => prev.filter((sale) => sale._id !== reservationId));
       } else {
         toast.error(res.data.message || "Erreur lors de l'annulation ❌");
       }
@@ -132,10 +131,12 @@ export default function ReserveSales() {
     }
   };
 
+  // --- Calcul du prix final avec remise en FCFA ---
   const calculateFinalPrice = () => {
     if (!selectedProduct) return 0;
     const basePrice = selectedProduct.price * form.quantity;
-    return basePrice - (basePrice * form.discount) / 100;
+    const discountAmount = Number(form.discount) || 0;
+    return Math.max(basePrice - discountAmount, 0); // éviter un prix négatif
   };
 
   return (
@@ -224,7 +225,7 @@ export default function ReserveSales() {
                 </div>
 
                 <div className="rs-form-group">
-                  <label className="rs-label">Remise (%)</label>
+                  <label className="rs-label">Remise (FCFA)</label>
                   <input
                     type="number"
                     className="rs-input"
@@ -232,7 +233,7 @@ export default function ReserveSales() {
                     value={form.discount}
                     onChange={handleChange}
                     min="0"
-                    max="100"
+                    max={selectedProduct?.price * form.quantity}
                   />
                 </div>
 
@@ -366,8 +367,6 @@ export default function ReserveSales() {
     </div>
   );
 }
-
-
 
 
 

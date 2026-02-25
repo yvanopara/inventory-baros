@@ -50,7 +50,7 @@ const MonthlySummaryTable = () => {
 
   const getWeekColor = (weekIndex) => {
     const colors = [
-      "#3B82F6", "#10B981", "#F59E0B", "#EF4444", 
+      "#3B82F6", "#10B981", "#F59E0B", "#EF4444",
       "#8B5CF6", "#EC4899", "#06B6D4", "#84CC16"
     ];
     return colors[weekIndex % colors.length];
@@ -160,7 +160,7 @@ const MonthlySummaryTable = () => {
           <div className="ms-performance-item">
             <span className="ms-performance-label">Semaines actives :</span>
             <span className="ms-performance-value">
-              {summaryData.weeklySummaries.filter(week => 
+              {summaryData.weeklySummaries.filter(week =>
                 week.days.some(day => day.sales.length > 0)
               ).length}
             </span>
@@ -187,7 +187,7 @@ const MonthlySummaryTable = () => {
           return (
             <div key={weekIndex} className="ms-week-section">
               {/* En-tête de semaine */}
-              <div 
+              <div
                 className="ms-week-header"
                 onClick={() => toggleWeek(weekIndex)}
                 style={{ borderLeftColor: weekColor }}
@@ -221,82 +221,110 @@ const MonthlySummaryTable = () => {
                             <th>Prix</th>
                             <th>Profit</th>
                             <th>Coût</th>
+                            <th>Contact</th>
+                            <th>Commentaire</th>
                             <th>Preuve</th>
-                            <th>Statut</th>
+                            <th>Heure</th>
                           </tr>
                         </thead>
                         <tbody>
                           {week.days.flatMap((day, dayIndex) =>
-                            day.sales.map((sale, saleIndex) => (
-                              <tr 
-                                key={`${weekIndex}-${dayIndex}-${saleIndex}`}
-                                className={saleIndex % 2 === 0 ? "ms-even-row" : "ms-odd-row"}
-                              >
-                                <td className="ms-date-cell">
-                                  {new Date(day.date).toLocaleDateString("fr-FR", {
-                                    weekday: 'short',
-                                    day: 'numeric',
-                                    month: 'short'
-                                  })}
-                                </td>
-                                <td className="ms-product-cell">
-                                  <span className="ms-product-name">
-                                    {sale.productName || "Inconnu"}
-                                  </span>
-                                </td>
-                                <td>
-                                  {sale.productPhoto ? (
-                                    <img
-                                      src={sale.productPhoto}
-                                      alt="Produit"
-                                      className="ms-product-image"
-                                      onClick={() => openImageModal(sale.productPhoto)}
-                                    />
-                                  ) : (
-                                    <div className="ms-no-image">
-                                      <span>📷</span>
+                            day.sales.map((sale, saleIndex) => {
+                              return (
+                                <tr
+                                  key={`${weekIndex}-${dayIndex}-${saleIndex}`}
+                                  className={saleIndex % 2 === 0 ? "ms-even-row" : "ms-odd-row"}
+                                >
+                                  <td className="ms-date-cell">
+                                    {new Date(day.date).toLocaleDateString("fr-FR", {
+                                      weekday: 'short',
+                                      day: 'numeric',
+                                      month: 'short'
+                                    })}
+                                  </td>
+                                  <td className="ms-product-cell">
+                                    <span className="ms-product-name">
+                                      {sale.productName || "Inconnu"}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    {sale.productPhoto ? (
+                                      <img
+                                        src={sale.productPhoto}
+                                        alt="Produit"
+                                        className="ms-product-image"
+                                        onClick={() => openImageModal(sale.productPhoto)}
+                                      />
+                                    ) : (
+                                      <div className="ms-no-image">
+                                        <span>📷</span>
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td className="ms-quantity-cell">
+                                    <span className="ms-quantity-badge">
+                                      {sale.quantity}
+                                    </span>
+                                  </td>
+                                  <td className="ms-revenue-cell">
+                                    {formatCurrency(sale.revenue)}
+                                  </td>
+                                  <td className="ms-profit-cell">
+                                    {formatCurrency(sale.profit)}
+                                  </td>
+                                  <td className="ms-cost-cell">
+                                    {formatCurrency(sale.cost)}
+                                  </td>
+                                  <td className="ms-phone-cell">
+                                    {sale.customerPhone ? (
+                                      <a 
+                                        href={`https://wa.me/237${sale.customerPhone.replace(/\s+/g, '')}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="ms-whatsapp-link"
+                                        title="Contacter sur WhatsApp"
+                                      >
+                                        <span className="ms-whatsapp-icon">📱</span>
+                                        {sale.customerPhone}
+                                      </a>
+                                    ) : (
+                                      <span className="ms-no-phone">-</span>
+                                    )}
+                                  </td>
+                                  <td className="ms-comment-cell">
+                                    <div className="ms-comment-content">
+                                      {sale.comment ? (
+                                        <span className="ms-comment-text">
+                                          {sale.comment}
+                                        </span>
+                                      ) : (
+                                        <span className="ms-no-comment">-</span>
+                                      )}
                                     </div>
-                                  )}
-                                </td>
-                                <td className="ms-quantity-cell">
-                                  <span className="ms-quantity-badge">
-                                    {sale.quantity}
-                                  </span>
-                                </td>
-                                <td className="ms-revenue-cell">
-                                  {formatCurrency(sale.revenue)}
-                                </td>
-                                <td className="ms-profit-cell">
-                                  {formatCurrency(sale.profit)}
-                                </td>
-                                <td className="ms-cost-cell">
-                                  {formatCurrency(sale.cost)}
-                                </td>
-                                <td>
-                                  {sale.proofImage ? (
-                                    <img
-                                      src={sale.proofImage}
-                                      alt="Preuve"
-                                      className="ms-proof-image"
-                                      onClick={() => openImageModal(sale.proofImage)}
-                                    />
-                                  ) : (
-                                    <div className="ms-no-proof">
-                                      <span>📄</span>
-                                    </div>
-                                  )}
-                                </td>
-                                <td className="ms-status-cell">
-                                  <span 
-                                    className={`ms-status-badge ${
-                                      (sale.status || "active").toLowerCase()
-                                    }`}
-                                  >
-                                    {sale.status || "active"}
-                                  </span>
-                                </td>
-                              </tr>
-                            ))
+                                  </td>
+                                  <td>
+                                    {sale.proofImage ? (
+                                      <img
+                                        src={sale.proofImage}
+                                        alt="Preuve"
+                                        className="ms-proof-image"
+                                        onClick={() => openImageModal(sale.proofImage)}
+                                      />
+                                    ) : (
+                                      <div className="ms-no-proof">
+                                        <span>📄</span>
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td className="ms-time-cell">
+                                    {new Date(sale.date).toLocaleTimeString("fr-FR", {
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    })}
+                                  </td>
+                                </tr>
+                              );
+                            })
                           )}
                         </tbody>
                       </table>
@@ -328,7 +356,7 @@ const MonthlySummaryTable = () => {
       </div>
 
       {/* État vide */}
-      {summaryData.weeklySummaries.every(week => 
+      {summaryData.weeklySummaries.every(week =>
         week.days.every(day => day.sales.length === 0)
       ) && (
         <div className="ms-empty-state">
@@ -352,21 +380,6 @@ const MonthlySummaryTable = () => {
 };
 
 export default MonthlySummaryTable;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

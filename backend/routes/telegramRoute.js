@@ -3,7 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 import { getDailySummary } from "../controllers/salesController.js";
 
 const router = express.Router();
-const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: true });
+const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: false });
 
 router.get("/test/daily", async (req, res) => {
   try {

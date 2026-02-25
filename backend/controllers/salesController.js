@@ -624,6 +624,7 @@ export const gettMonthlySummary = async (req, res) => {
       .populate("productId", "name image")
       .sort({ createdAt: 1 });
 
+      
     // Formatage des ventes
     const formattedSales = sales.map((sale) => ({
       productPhoto: sale.productId?.image || "",
@@ -635,7 +636,10 @@ export const gettMonthlySummary = async (req, res) => {
       proofImage: sale.proofImage || "",
       status: sale.status || "",
       date: sale.createdAt,
+
+      // ✅ Nouveaux champs
       customerPhone: sale.customerPhone || "",
+      comment: sale.comment || "",
     }));
 
     // Génération des jours du mois (pour remplir weeklySummaries)
@@ -709,21 +713,22 @@ export const gettMonthlySummary = async (req, res) => {
 
 
 // --- Yearly Summary ---
+// --- Yearly Summary avec détails des ventes ---
 export const getYearlySummary = async (req, res) => {
   try {
     const now = new Date();
-    const year = req.query.year ? parseInt(req.query.year) : now.getFullYear(); // année courante par défaut
+    const year = req.query.year ? parseInt(req.query.year) : now.getFullYear();
 
     const start = new Date(year, 0, 1); // 1er janvier
     start.setHours(0, 0, 0, 0);
     const end = new Date(year, 11, 31); // 31 décembre
     end.setHours(23, 59, 59, 999);
 
-    // On récupère toutes les ventes actives de l’année
-    const sales = await saleModel.find({
-      createdAt: { $gte: start, $lte: end },
-      status: "active"
-    }).populate("productId", "name image");
+    // Récupérer toutes les ventes actives de l'année
+    const sales = await saleModel
+      .find({ createdAt: { $gte: start, $lte: end }, status: "active" })
+      .populate("productId", "name image")
+      .sort({ createdAt: 1 });
 
     if (!sales.length) {
       return res.status(200).json({
@@ -731,18 +736,53 @@ export const getYearlySummary = async (req, res) => {
         year,
         monthlySummaries: [],
         totalSummary: { totalQuantity: 0, totalRevenue: 0, totalProfit: 0, totalCost: 0 },
+        yearlySales: [],
       });
     }
 
-    // Regrouper les ventes par mois
+    // --- Fonction utilitaire pour résumer un tableau de ventes ---
+    const computeSummary = (salesArray) => {
+      let totalQuantity = 0,
+        totalRevenue = 0,
+        totalProfit = 0,
+        totalCost = 0;
+      salesArray.forEach((sale) => {
+        totalQuantity += sale.quantity || 0;
+        totalRevenue += sale.finalPrice || 0;
+        totalProfit += sale.profit || 0;
+        totalCost += sale.totalCost || 0;
+      });
+      return { totalQuantity, totalRevenue, totalProfit, totalCost };
+    };
+
+    // --- Construire les détails des ventes individuelles ---
+    const yearlySales = sales.map((sale) => ({
+      saleId: sale._id,
+      productPhoto: sale.productId?.image || "",
+      productName: sale.productName || sale.productId?.name || "Produit inconnu",
+      quantity: sale.quantity,
+      sellingPrice: sale.sellingPrice || 0,
+      costPrice: sale.costPrice || 0,
+      discount: sale.discount || 0,
+      finalPrice: sale.finalPrice || 0,
+      profit: sale.profit || 0,
+      totalCost: sale.totalCost || 0,
+      variantSize: sale.variantSize || null,
+      customerPhone: sale.customerPhone || "",
+      comment: sale.comment || "",
+      proofImage: sale.proofImage || "",
+      status: sale.status,
+      date: sale.createdAt,
+    }));
+
+    // --- Regrouper par mois pour le résumé mensuel ---
     const monthlyData = {};
-    sales.forEach(sale => {
-      const monthKey = new Date(sale.createdAt).getMonth(); // 0 = janvier, 11 = décembre
+    sales.forEach((sale) => {
+      const monthKey = new Date(sale.createdAt).getMonth(); // 0 = janvier
       if (!monthlyData[monthKey]) monthlyData[monthKey] = [];
       monthlyData[monthKey].push(sale);
     });
 
-    // Construire le résumé mensuel
     const monthlySummaries = [];
     for (let m = 0; m < 12; m++) {
       const monthSales = monthlyData[m] || [];
@@ -754,20 +794,20 @@ export const getYearlySummary = async (req, res) => {
       });
     }
 
-    // Résumé global de l’année
+    // --- Résumé total de l'année ---
     const totalSummary = computeSummary(sales);
 
     res.status(200).json({
       year,
-      monthlySummaries,
       totalSummary,
+      monthlySummaries,
+      yearlySales, // Détails de toutes les ventes
     });
   } catch (err) {
     console.error("Erreur dans getYearlySummary :", err);
     res.status(500).json({ message: "Erreur serveur", error: err.message });
   }
 };
-
 
 
 

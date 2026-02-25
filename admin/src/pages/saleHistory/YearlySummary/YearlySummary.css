@@ -1,3 +1,4 @@
+/* YearlySummary.css */
 .ys-container {
   padding: 32px;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -26,8 +27,13 @@
 }
 
 @keyframes ys-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* HEADER */
@@ -59,38 +65,80 @@
   font-weight: 500;
 }
 
-.ys-year-selector {
+/* Year Navigation */
+.ys-year-navigation {
   display: flex;
   align-items: center;
   gap: 12px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  padding: 8px;
+  border-radius: 50px;
+  border: 1px solid #e2e8f0;
 }
 
-.ys-year-label {
-  font-weight: 600;
-  color: #475569;
-  font-size: 1rem;
+.ys-year-nav-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #4f46e5;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.ys-year-input-container {
-  position: relative;
+.ys-year-nav-btn:hover:not(:disabled) {
+  background: #4f46e5;
+  color: white;
+  border-color: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
-.ys-year-input {
+.ys-year-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #e2e8f0;
+  color: #94a3b8;
+}
+
+.ys-year-selector {
+  min-width: 120px;
+}
+
+.ys-year-select {
+  width: 100%;
   padding: 10px 16px;
   border: 2px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 30px;
   font-size: 1rem;
   font-weight: 600;
-  text-align: center;
-  width: 120px;
-  transition: all 0.3s ease;
+  color: #1e293b;
   background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
 }
 
-.ys-year-input:focus {
-  outline: none;
+.ys-year-select:hover {
   border-color: #4f46e5;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.ys-year-select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
 /* MESSAGES */
@@ -98,10 +146,7 @@
   margin-bottom: 24px;
 }
 
-.ys-error {
-  background: linear-gradient(135deg, #fef2f2, #fee2e2);
-  border: 1px solid #fecaca;
-  color: #dc2626;
+.ys-message {
   padding: 18px 24px;
   border-radius: 14px;
   display: flex;
@@ -110,7 +155,19 @@
   font-weight: 500;
 }
 
-.ys-error-icon {
+.ys-error {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.ys-info {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.ys-message-icon {
   font-size: 1.3rem;
 }
 
@@ -263,7 +320,7 @@
 .ys-summary-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px;
+  min-width: 1100px;
 }
 
 .ys-summary-table th {
@@ -295,6 +352,11 @@
 .ys-even-row:hover,
 .ys-odd-row:hover {
   background: #f0f9ff;
+}
+
+.ys-expanded-row {
+  background: #e0f2fe !important;
+  border-bottom: 2px solid #4f46e5;
 }
 
 /* CELL STYLES */
@@ -337,6 +399,11 @@
   color: #475569;
 }
 
+.ys-quantity-value {
+  font-weight: 700;
+  color: #1e293b;
+}
+
 .ys-revenue-cell {
   font-weight: 700;
   color: #059669;
@@ -371,10 +438,6 @@
   height: 100%;
   border-radius: 10px;
   transition: width 0.3s ease;
-  min-width: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .ys-performance-text {
@@ -385,6 +448,126 @@
   font-weight: 700;
   color: #1e293b;
   z-index: 1;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.ys-actions-cell {
+  text-align: center;
+  width: 60px;
+}
+
+.ys-expand-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #4f46e5;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin: 0 auto;
+}
+
+.ys-expand-btn:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+/* DETAILS ROW */
+.ys-details-row {
+  background: #f8fafc;
+}
+
+.ys-details-row td {
+  padding: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.ys-month-details {
+  animation: ys-slideDown 0.3s ease;
+}
+
+@keyframes ys-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ys-month-details h4 {
+  margin-bottom: 16px;
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.ys-details-table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
+}
+
+.ys-details-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+}
+
+.ys-details-table th {
+  background: #f1f5f9;
+  padding: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ys-details-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  background: white;
+}
+
+.ys-details-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ys-product-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ys-product-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+}
+
+.ys-profit-positive {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.ys-profit-negative {
+  color: #ef4444;
+  font-weight: 600;
 }
 
 /* GLOBAL SUMMARY */
@@ -393,6 +576,7 @@
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  margin-top: 32px;
 }
 
 .ys-summary-header {
@@ -413,7 +597,7 @@
 
 .ys-summary-badge {
   background: rgba(255, 255, 255, 0.2);
-  padding: 6px 12px;
+  padding: 6px 16px;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -437,6 +621,8 @@
 
 .ys-summary-item:hover {
   background: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .ys-summary-item:nth-child(odd) {
@@ -472,6 +658,7 @@
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 4px;
+  line-height: 1.2;
 }
 
 .ys-summary-label {
@@ -502,30 +689,93 @@
   color: #475569;
   margin-bottom: 12px;
   font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ys-empty-state p {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* PERIOD BADGE */
+.ys-period-badge {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  display: inline-block;
+}
+
+/* ANIMATIONS */
+.ys-fade-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.ys-fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.ys-fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ys-fade-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
 }
 
 /* RESPONSIVE */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .ys-container {
     padding: 24px;
   }
-  
+
+  .ys-header-content h2 {
+    font-size: 2rem;
+  }
+
+  .ys-stat-value {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .ys-container {
+    padding: 20px;
+  }
+
   .ys-header {
     flex-direction: column;
     text-align: center;
+    align-items: center;
   }
-  
+
   .ys-stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .ys-summary-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .ys-performance {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .ys-performance-item {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
@@ -533,55 +783,441 @@
   .ys-container {
     padding: 16px;
   }
-  
+
   .ys-header-content h2 {
     font-size: 1.75rem;
   }
-  
+
+  .ys-subtitle {
+    font-size: 1rem;
+  }
+
   .ys-stats-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
-  
+
   .ys-stat-card {
-    padding: 24px;
+    padding: 20px;
   }
-  
+
+  .ys-stat-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+  }
+
+  .ys-stat-value {
+    font-size: 1.5rem;
+  }
+
   .ys-summary-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .ys-summary-item {
-    border-right: none;
+    border-right: none !important;
+    padding: 20px;
   }
-  
+
+  .ys-summary-value {
+    font-size: 1.5rem;
+  }
+
   .ys-table-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     text-align: center;
+    padding: 20px;
+  }
+
+  .ys-table-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .ys-performance {
+    padding: 16px 20px;
+  }
+
+  .ys-year-navigation {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ys-year-selector {
+    min-width: 100px;
+  }
+
+  .ys-year-select {
+    padding: 8px 12px 8px 16px;
+    font-size: 0.9rem;
+    background-position: right 8px center;
+    padding-right: 32px;
+  }
+
+  .ys-summary-table {
+    min-width: 900px;
+  }
+
+  .ys-details-table {
+    min-width: 800px;
+  }
+
+  .ys-month-details h4 {
+    font-size: 1rem;
+  }
+
+  .ys-product-thumb {
+    width: 24px;
+    height: 24px;
   }
 }
 
 @media (max-width: 480px) {
-  .ys-summary-table {
-    min-width: 800px;
+  .ys-container {
+    padding: 12px;
   }
-  
+
+  .ys-header {
+    padding: 20px;
+  }
+
+  .ys-header-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .ys-year-navigation {
+    padding: 4px;
+  }
+
+  .ys-year-nav-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
   .ys-year-selector {
+    min-width: 90px;
+  }
+
+  .ys-year-select {
+    font-size: 0.85rem;
+    padding: 6px 10px 6px 12px;
+    padding-right: 28px;
+  }
+
+  .ys-stat-card {
+    padding: 16px;
+  }
+
+  .ys-stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .ys-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .ys-stat-title {
+    font-size: 0.8rem;
+  }
+
+  .ys-performance-item {
     flex-direction: column;
-    gap: 8px;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .ys-performance-value {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ys-summary-header {
+    padding: 16px 20px;
+  }
+
+  .ys-summary-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .ys-summary-badge {
+    padding: 4px 12px;
+    font-size: 0.75rem;
+  }
+
+  .ys-empty-icon {
+    font-size: 4rem;
+  }
+
+  .ys-empty-state h3 {
+    font-size: 1.25rem;
+  }
+
+  .ys-period-badge {
+    padding: 8px 16px;
+    font-size: 0.9rem;
   }
 }
 
-.ys-period-badge {
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  white-space: nowrap;
+/* Print styles */
+@media print {
+  .ys-container {
+    background: white;
+    padding: 20px;
+  }
+
+  .ys-year-navigation,
+  .ys-expand-btn,
+  .ys-actions-cell {
+    display: none;
+  }
+
+  .ys-stat-card,
+  .ys-table-section,
+  .ys-global-summary {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+    break-inside: avoid;
+  }
+
+  .ys-summary-table th {
+    background: #f1f5f9;
+    color: #1e293b;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .ys-performance-bar {
+    border: 1px solid #e2e8f0;
+  }
+
+  .ys-performance-fill {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }
 
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ys-container {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+  }
+
+  .ys-header,
+  .ys-stat-card,
+  .ys-performance,
+  .ys-table-section,
+  .ys-global-summary,
+  .ys-empty-state {
+    background: #1e293b;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .ys-header-content h2 {
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .ys-subtitle,
+  .ys-stat-title,
+  .ys-performance-label,
+  .ys-summary-label,
+  .ys-empty-state p {
+    color: #94a3b8;
+  }
+
+  .ys-stat-value,
+  .ys-performance-value,
+  .ys-summary-value,
+  .ys-month-name,
+  .ys-empty-state h3 {
+    color: #f1f5f9;
+  }
+
+  .ys-even-row {
+    background: #1e293b;
+  }
+
+  .ys-odd-row {
+    background: #0f172a;
+  }
+
+  .ys-summary-table td {
+    border-bottom-color: #334155;
+  }
+
+  .ys-table-header {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-bottom-color: #334155;
+  }
+
+  .ys-table-header h3 {
+    color: #f1f5f9;
+  }
+
+  .ys-performance-bar {
+    background: #334155;
+  }
+
+  .ys-performance-text {
+    color: #f1f5f9;
+  }
+
+  .ys-summary-item {
+    border-color: #334155;
+  }
+
+  .ys-summary-item:hover {
+    background: #0f172a;
+  }
+
+  .ys-summary-icon {
+    background: #0f172a;
+  }
+
+  .ys-details-table th {
+    background: #0f172a;
+    color: #94a3b8;
+  }
+
+  .ys-details-table td {
+    background: #1e293b;
+    color: #f1f5f9;
+  }
+
+  .ys-product-thumb {
+    border-color: #334155;
+  }
+
+  .ys-year-navigation {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-color: #334155;
+  }
+
+  .ys-year-nav-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #818cf8;
+  }
+
+  .ys-year-select {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+
+  .ys-year-select:hover {
+    border-color: #818cf8;
+  }
+
+  .ys-message.ys-info {
+    background: linear-gradient(135deg, #1e3a8a, #1e40af);
+    border-color: #3b82f6;
+    color: #bfdbfe;
+  }
+}
+
+/* À ajouter à la fin du fichier YearlySummary.css */
+
+/* Ajuster la largeur minimale du tableau des détails */
+.ys-details-table {
+  min-width: 1200px;
+  /* Augmenté pour accommoder la nouvelle colonne */
+}
+
+/* Styles pour la cellule de commentaire */
+.ys-comment-cell {
+  max-width: 200px;
+}
+
+.ys-comment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid #e2e8f0;
+  cursor: help;
+}
+
+.ys-comment-icon {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.ys-comment-text {
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.ys-no-comment {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* Tooltip pour les commentaires longs */
+.ys-comment:hover .ys-comment-text {
+  white-space: normal;
+  overflow: visible;
+  background: white;
+  position: absolute;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+  max-width: 300px;
+  z-index: 1000;
+  margin-top: 20px;
+  word-wrap: break-word;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+  .ys-comment {
+    max-width: 120px;
+  }
+
+  .ys-comment-text {
+    max-width: 80px;
+  }
+
+  .ys-comment:hover .ys-comment-text {
+    max-width: 250px;
+  }
+}
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+  .ys-comment {
+    background: #0f172a;
+    border-color: #334155;
+  }
+
+  .ys-comment-text {
+    color: #94a3b8;
+  }
+
+  .ys-no-comment {
+    color: #64748b;
+  }
+
+  .ys-comment:hover .ys-comment-text {
+    background: #1e293b;
+    border-color: #4f46e5;
+    color: #f1f5f9;
+  }
+}
 
 /* .yearly-summary-container {
   padding: 20px;
