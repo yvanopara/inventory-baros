@@ -50,7 +50,7 @@ const WeeklySummary = () => {
   const getDayColor = (day) => {
     const colors = {
       "Lundi": "#3B82F6",
-      "Mardi": "#10B981", 
+      "Mardi": "#10B981",
       "Mercredi": "#F59E0B",
       "Jeudi": "#EF4444",
       "Vendredi": "#8B5CF6",
@@ -89,11 +89,11 @@ const WeeklySummary = () => {
           </p>
         </div>
         <div className="ws-period-badge">
-          {new Date().toLocaleDateString('fr-FR', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+          {new Date().toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
           })}
         </div>
       </div>
@@ -154,7 +154,7 @@ const WeeklySummary = () => {
 
           return (
             <div key={index} className="ws-day-section">
-              <div 
+              <div
                 className="ws-day-header"
                 style={{ borderLeftColor: dayColor }}
               >
@@ -180,12 +180,69 @@ const WeeklySummary = () => {
                         <th>Prix</th>
                         <th>Profit</th>
                         <th>Coût</th>
-                        <th>Téléphone</th> 
+                        <th>Téléphone</th> {/* ← ajouté */}
                         <th>Commentaire</th>
                         <th>Preuve</th>
                         <th>Heure</th>
                       </tr>
                     </thead>
+                    <tbody>
+                      {wsDailySales[day].map((sale, i) => (
+                        <tr key={i} className={i % 2 === 0 ? "ws-row-even" : "ws-row-odd"}>
+                          <td className="ws-product-cell">
+                            <span className="ws-product-name">{sale.productName}</span>
+                          </td>
+                          <td>
+                            {sale.productPhoto ? (
+                              <img
+                                src={sale.productPhoto}
+                                alt={sale.productName}
+                                className="ws-img"
+                                onClick={() => openImageModal(sale.productPhoto)}
+                              />
+                            ) : (
+                              <div className="ws-no-img">
+                                <span>📷</span>
+                              </div>
+                            )}
+                          </td>
+                          <td className="ws-quantity-cell">
+                            <span className="ws-quantity-badge">{sale.quantity}</span>
+                          </td>
+                          <td className="ws-money-cell">{formatCurrency(sale.revenue)}</td>
+                          <td className="ws-profit-cell">{formatCurrency(sale.profit)}</td>
+                          <td className="ws-cost-cell">{formatCurrency(sale.cost)}</td>
+                          <td className="ws-phone-cell">{sale.customerPhone || "—"}</td> {/* ← affichage du numéro */}
+                          <td className="ws-comment">
+                            {sale.comment ? (
+                              <div className="ws-comment-text">{sale.comment}</div>
+                            ) : (
+                              <span className="ws-no-comment">-</span>
+                            )}
+                          </td>
+                          <td>
+                            {sale.proofImage ? (
+                              <img
+                                src={sale.proofImage}
+                                alt="Preuve"
+                                className="ws-proof"
+                                onClick={() => openImageModal(sale.proofImage)}
+                              />
+                            ) : (
+                              <div className="ws-no-img">
+                                <span>📄</span>
+                              </div>
+                            )}
+                          </td>
+                          <td className="ws-time-cell">
+                            {new Date(sale.date).toLocaleTimeString("fr-FR", {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                     <tbody>
                       {wsDailySales[day].map((sale, i) => (
                         <tr key={i} className={i % 2 === 0 ? "ws-row-even" : "ws-row-odd"}>
